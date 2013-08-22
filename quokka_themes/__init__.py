@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Flask-Themes2
+Quokka-Themes
 =============
 
 This provides infrastructure for theming support in your Flask applications.
@@ -11,7 +11,7 @@ It takes care of:
 - Serving their static media
 - Letting themes reference their templates and static media
 
-:copyright: 2013 Christopher Carter, 2012 Drew Lustro, 2010 Matthew "LeafStorm" Frazier
+:based in: 2013 Christopher Carter, 2012 Drew Lustro, 2010 Matthew "LeafStorm" Frazier
 :license:   MIT/X11, see LICENSE for details
 """
 

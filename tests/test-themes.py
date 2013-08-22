@@ -1,12 +1,16 @@
 """
 test-themes.py
 ==============
-This tests the Flask-Themes2 extension.
+This tests the quokka_themes extension.
 """
 from __future__ import with_statement
+
+import sys
+sys.path.append('..')
+
 import os.path
 from flask import Flask, url_for, render_template
-from flask.ext.themes2 import (Themes, Theme, load_themes_from,
+from quokka_themes import (Themes, Theme, load_themes_from,
     packaged_themes_loader, theme_paths_loader, ThemeManager, static_file_url,
     template_exists, render_theme_template, get_theme,
     get_themes_list, themes_blueprint)

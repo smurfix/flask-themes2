@@ -9,20 +9,20 @@ def long_desc():
     with open('README.rst', 'rb') as f:
         return f.read()
 
-execfile("flask_themes2/version.py")
+execfile("quokka_themes/version.py")
 
 kw = {
-    "name": "Flask-Themes2",
+    "name": "Quokka-Themes",
     "version": __version__,
-    "url": "https://github.com/plausibility/flask-themes2",
+    "url": "https://github.com/pythonhub/quokka-themes",
     "license": "MIT",
-    "author": "plausibility",
-    "author_email": "chris@gibsonsec.org",
+    "author": "rochacbruno",
+    "author_email": "rochacbruno+pythonhub@gmail.com",
     "description": "Provides infrastructure for theming Flask applications (and supports Flask>=0.6!)",
     "long_description": long_desc(),
     "keywords": "flask themes theming style",
     "packages": [
-        "flask_themes2"
+        "quokka_themes"
     ],
     "zip_safe": False,
     "install_requires": requires,

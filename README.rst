@@ -1,7 +1,9 @@
+.. image:: docs/quokka_themes.png
+
 Quokka-Themes
 =============
 
-It is a WIP fork of Flask-themes2 to woork with quokka cms
+It is a fork of Flask-themes2 adapted to work with Quokka CMS
 
 .. _docs: http://flask-themes2.rtfd.org
 .. _GitHub: https://github.com/plausibility/flask-themes2

@@ -134,6 +134,8 @@ def render_theme_template(theme, template_name, _fallback=True, **context):
     if not isinstance(template_name, (list, tuple)):
         template_name = [template_name]
 
+    last = template_name.pop()
+    
     for name in template_name:
         try:
             logger.debug(
@@ -156,6 +158,15 @@ def render_theme_template(theme, template_name, _fallback=True, **context):
                 logger.debug("{} not found, trying next...".format(name))
                 continue
 
+    try:
+        logger.debug("Trying to load last template {} in {}".format(last, theme))
+        return render_template('_themes/%s/%s' % (theme, last), **context)
+    except TemplateNotFound:
+        if _fallback:
+            logger.debug("Trying to load last template {} in app templates".format(last))
+            return render_template(last, **context)
+
+    logger.debug("Template {} not found".format(last))    
     raise
 
 ### convenience #########################################################

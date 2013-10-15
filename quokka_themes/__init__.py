@@ -3,7 +3,7 @@
 Quokka-Themes
 =============
 
-This provides infrastructure for theming support in your Flask applications.
+This provides infrastructure for theming support in your Quokka applications.
 It takes care of:
 
 - Loading themes
@@ -26,6 +26,7 @@ import os
 import os.path
 import re
 
+import logging
 
 from flask import (Module, send_from_directory, render_template, json,
                    abort, url_for, Blueprint)
@@ -40,6 +41,8 @@ from jinja2 import contextfunction
 from jinja2.loaders import FileSystemLoader, BaseLoader, TemplateNotFound
 
 from werkzeug import cached_property
+
+logger = logging.getLogger()
 
 DOCTYPES = 'html4 html5 xhtml'.split()
 IDENTIFIER = re.compile(r'^[a-zA-Z_][a-zA-Z0-9_]*$')
@@ -115,17 +118,40 @@ def render_theme_template(theme, template_name, _fallback=True, **context):
     :param template_name: The name of the template to render.
     :param _fallback: Whether to fall back to the default
     """
+    logger.debug("Rendering template")
+    logger.debug("theme {} - template {} - fallback {} - context {}".format(
+        theme, template_name, _fallback, context))
+
     if isinstance(theme, Theme):
         theme = theme.identifier
     context['_theme'] = theme
-    try:
-        return render_template('_themes/%s/%s' % (theme, template_name),
-                               **context)
-    except TemplateNotFound:
-        if _fallback:
-            return render_template(template_name, **context)
-        else:
-            raise
+
+    if not isinstance(template_name, (list, tuple)):
+        template_name = [template_name]
+
+    for name in template_name:
+        try:
+            logger.debug(
+                "trying to render {} in {}".format(name, theme)
+            )
+            return render_template('_themes/%s/%s' % (theme, name),
+                                   **context)
+        except TemplateNotFound:
+            logger.debug("{} not found in {}, trying next...".format(name, theme))
+            continue
+            
+    if _fallback:
+        logger.debug("Fallback to app templates folder")
+        for name in template_name:
+            try:
+                logger.debug(
+                    "trying to render {} in app templates".format(name))
+                return render_template(name, **context)
+            except TemplateNotFound:
+                logger.debug("{} not found, trying next...".format(name))
+                continue
+
+    raise
 
 ### convenience #########################################################
 

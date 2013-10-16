@@ -46,3 +46,9 @@ The documentation is on the Flask-Themes2 `docs`_.
 Development
 -----------
 If you're interested in helping, the source is available on `GitHub`_, feel free to contribute.
+
+
+.. image:: https://d2weczhvl823v0.cloudfront.net/pythonhub/quokka-themes/trend.png
+   :alt: Bitdeli badge
+   :target: https://bitdeli.com/free
+

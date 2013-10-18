@@ -123,30 +123,37 @@ def render_theme_template(theme, template_name, _fallback=True, **context):
     :param template_name: The name of the template to render.
     :param _fallback: Whether to fall back to the default
     """
+
+    if not isinstance(theme, (list, tuple)):
+        theme = [theme]
+        
     logger.debug("Rendering template")
     logger.debug("theme {} - template {} - fallback {} - context {}".format(
         theme, template_name, _fallback, context))
-
-    if isinstance(theme, Theme):
-        theme = theme.identifier
-    context['_theme'] = theme
 
     if not isinstance(template_name, (list, tuple)):
         template_name = [template_name]
 
     last = template_name.pop()
-    
+
+    themes = theme
+
     for name in template_name:
-        try:
-            logger.debug(
-                "trying to render {} in {}".format(name, theme)
-            )
-            return render_template('_themes/%s/%s' % (theme, name),
-                                   **context)
-        except TemplateNotFound:
-            logger.debug("{} not found in {}, trying next...".format(name, theme))
-            continue
-            
+        for theme in themes:
+            if isinstance(theme, Theme):
+                theme = theme.identifier
+            context['_theme'] = theme
+
+            try:
+                logger.debug(
+                    "trying to render {} in {}".format(name, theme)
+                )
+                return render_template('_themes/%s/%s' % (theme, name),
+                                       **context)
+            except TemplateNotFound:
+                logger.debug("{} not found in {}, trying next...".format(name, theme))
+                continue
+
     if _fallback:
         logger.debug("Fallback to app templates folder")
         for name in template_name:
@@ -158,15 +165,23 @@ def render_theme_template(theme, template_name, _fallback=True, **context):
                 logger.debug("{} not found, trying next...".format(name))
                 continue
 
-    try:
-        logger.debug("Trying to load last template {} in {}".format(last, theme))
-        return render_template('_themes/%s/%s' % (theme, last), **context)
-    except TemplateNotFound:
-        if _fallback:
-            logger.debug("Trying to load last template {} in app templates".format(last))
-            return render_template(last, **context)
+    for theme in themes:
+        if isinstance(theme, Theme):
+            theme = theme.identifier
+        context['_theme'] = theme
+
+        try:
+            logger.debug("Trying to load last template {} in {}".format(last, theme))
+            return render_template('_themes/%s/%s' % (theme, last), **context)
+        except TemplateNotFound:
+            continue
+            
+    if _fallback:
+        logger.debug("Trying to load last template {} in app templates".format(last))
+        return render_template(last, **context)
 
     logger.debug("Template {} not found".format(last))    
+
     raise
 
 ### convenience #########################################################

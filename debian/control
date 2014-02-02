@@ -1,0 +1,31 @@
+Source: quokka-themes
+Maintainer: rochacbruno <rochacbruno+pythonhub@gmail.com>
+Section: python
+Priority: optional
+Build-Depends: python-setuptools (>= 0.6b3), python-all (>= 2.6.6-3), debhelper (>= 7)
+Standards-Version: 3.9.1
+
+Package: python-quokka-themes
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}
+Description: Provides infrastructure for theming Flask applications (and 
+ .. image:: docs/quokka_themes.png
+ .
+ Quokka-Themes
+ =============
+ .
+ It is a fork of Flask-themes2 adapted to work with Quokka CMS
+ .
+ .. _docs: http://flask-themes2.rtfd.org
+ .. _GitHub: https://github.com/plausibility/flask-themes2
+ .
+ .. image:: https://travis-ci.org/plausibility/flask-themes2.png?branch=master
+     :target: http://travis-ci.org/plausibility/flask-themes2
+     :alt: Build Status
+ .
+ Flask-Themes2 is a fork of Spirits, which is in turn a fork of Flask-Themes.
+ .
+ - `Flask-Themes2 <https://github.com/plausibility/flask-themes2>`_ maintained by Christopher "plausibility" Carter
+ - `Spirits <https://github.com/drewlustro/spirits>`_ maintained by Drew Lustro
+ - `Flask-Themes <https://bitbucket.org/leafstorm/flask-themes>`_ by Matthew "LeafStorm" Frazier
+ .

@@ -3,7 +3,7 @@
 Flask-Themes2
 =============
 
-This provides infrastructure for theming support in your Flask applications.
+This provides infrastructure for theming support in your Quokka applications.
 It takes care of:
 
 - Loading themes
@@ -23,7 +23,9 @@ import itertools
 import os
 import re
 
-from flask import (send_from_directory, render_template, json,
+import logging
+
+from flask import (Module, send_from_directory, render_template, json,
                    abort, url_for, Blueprint)
 # Support >= Flask 0.9
 try:
@@ -37,9 +39,7 @@ from werkzeug import cached_property
 
 from ._compat import text_type, iteritems, itervalues
 
-
-__version__ = '0.13'
-
+__version__ = '0.2.0'
 
 DOCTYPES = 'html4 html5 xhtml'.split()
 IDENTIFIER = re.compile(r'^[a-zA-Z_][a-zA-Z0-9_]*$')
@@ -121,17 +121,50 @@ def render_theme_template(theme, template_name, _fallback=True, **context):
     :param template_name: The name of the template to render.
     :param _fallback: Whether to fall back to the default
     """
-    if isinstance(theme, Theme):
-        theme = theme.identifier
-    context['_theme'] = theme
-    try:
-        return render_template('_themes/%s/%s' % (theme, template_name),
-                               **context)
-    except TemplateNotFound:
-        if _fallback:
-            return render_template(template_name, **context)
-        else:
-            raise
+
+    if not isinstance(theme, (list, tuple)):
+        theme = [theme]
+        
+    if not isinstance(template_name, (list, tuple)):
+        template_name = [template_name]
+
+    last = template_name.pop()
+
+    themes = theme
+
+    for name in template_name:
+        for theme in themes:
+            if isinstance(theme, Theme):
+                theme = theme.identifier
+            context['_theme'] = theme
+
+            try:
+                return render_template('_themes/%s/%s' % (theme, name),
+                                       **context)
+            except TemplateNotFound:
+                continue
+
+    if _fallback:
+        for name in template_name:
+            try:
+                return render_template(name, **context)
+            except TemplateNotFound:
+                continue
+
+    for theme in themes:
+        if isinstance(theme, Theme):
+            theme = theme.identifier
+        context['_theme'] = theme
+
+        try:
+            return render_template('_themes/%s/%s' % (theme, last), **context)
+        except TemplateNotFound:
+            continue
+            
+    if _fallback:
+        return render_template(last, **context)
+
+    raise
 
 ### convenience #########################################################
 

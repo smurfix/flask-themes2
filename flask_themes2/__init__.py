@@ -41,8 +41,6 @@ from ._compat import text_type, iteritems, itervalues
 
 __version__ = '0.13'
 
-logger = logging.getLogger()
-
 DOCTYPES = 'html4 html5 xhtml'.split()
 IDENTIFIER = re.compile(r'^[a-zA-Z_][a-zA-Z0-9_]*$')
 
@@ -127,10 +125,6 @@ def render_theme_template(theme, template_name, _fallback=True, **context):
     if not isinstance(theme, (list, tuple)):
         theme = [theme]
         
-    logger.debug("Rendering template")
-    logger.debug("theme {} - template {} - fallback {} - context {}".format(
-        theme, template_name, _fallback, context))
-
     if not isinstance(template_name, (list, tuple)):
         template_name = [template_name]
 
@@ -145,24 +139,16 @@ def render_theme_template(theme, template_name, _fallback=True, **context):
             context['_theme'] = theme
 
             try:
-                logger.debug(
-                    "trying to render {} in {}".format(name, theme)
-                )
                 return render_template('_themes/%s/%s' % (theme, name),
                                        **context)
             except TemplateNotFound:
-                logger.debug("{} not found in {}, trying next...".format(name, theme))
                 continue
 
     if _fallback:
-        logger.debug("Fallback to app templates folder")
         for name in template_name:
             try:
-                logger.debug(
-                    "trying to render {} in app templates".format(name))
                 return render_template(name, **context)
             except TemplateNotFound:
-                logger.debug("{} not found, trying next...".format(name))
                 continue
 
     for theme in themes:
@@ -171,16 +157,12 @@ def render_theme_template(theme, template_name, _fallback=True, **context):
         context['_theme'] = theme
 
         try:
-            logger.debug("Trying to load last template {} in {}".format(last, theme))
             return render_template('_themes/%s/%s' % (theme, last), **context)
         except TemplateNotFound:
             continue
             
     if _fallback:
-        logger.debug("Trying to load last template {} in app templates".format(last))
         return render_template(last, **context)
-
-    logger.debug("Template {} not found".format(last))    
 
     raise
 

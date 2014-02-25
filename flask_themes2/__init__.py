@@ -39,7 +39,7 @@ from werkzeug import cached_property
 
 from ._compat import text_type, iteritems, itervalues
 
-__version__ = '0.13'
+__version__ = '0.2.0'
 
 DOCTYPES = 'html4 html5 xhtml'.split()
 IDENTIFIER = re.compile(r'^[a-zA-Z_][a-zA-Z0-9_]*$')
